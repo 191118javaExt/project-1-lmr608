@@ -8,7 +8,6 @@ public interface EmployeeDAO {
 
 	public boolean insert(Employee e);
 	public boolean update(Employee e);
-	
 	public List<Employee> findAll();
 	
 }

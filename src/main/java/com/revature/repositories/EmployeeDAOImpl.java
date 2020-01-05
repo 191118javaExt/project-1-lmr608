@@ -22,7 +22,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		PreparedStatement stmt = null;
 		
 		try (Connection conn = ConnectionUtil.getConnection()) {
-			String sql = "INSERT INTO project1.ers_users (USER_FIRST_NAME, USER_LAST_NAME, ERS_USERNAME, ERS_PASSWORD, USER_EMAIL, USER_ROLE_ID) " +
+			String sql = "INSERT INTO PROJECT1.USER (FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, ROLE_ID) " +
 					"VALUES (?, ?, ?, ?, ?, ?, ?);";
 			
 			stmt = conn.prepareStatement(sql);
@@ -42,7 +42,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		} finally {
 			CloseStreams.close(stmt);
 		}
-		
 		return true;
 	}
 
@@ -59,20 +58,20 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		
 		try (Connection conn = ConnectionUtil.getConnection()) {
 			
-			String sql = "SELECT * FROM project1.ers_users;";
+			String sql = "SELECT * FROM PROJECT1.USER;";
 			
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			
 			ResultSet rs = stmt.executeQuery();
 			
 			while(rs.next()) {
-				int id = rs.getInt("ERS_USERS_ID");
-				String first_name = rs.getString("USER_FIRST_NAME");
-				String last_name = rs.getString("USER_LAST_NAME");
-				String username = rs.getString("ERS_USERNAME");
-				String password = rs.getString("ERS_PASSWORD");
-				String email = rs.getString("USER_EMAIL");
-				int roleId = rs.getInt("USER_ROLE_ID");
+				int id = rs.getInt("USER_ID");
+				String first_name = rs.getString("FIRST_NAME");
+				String last_name = rs.getString("LAST_NAME");
+				String username = rs.getString("USERNAME");
+				String password = rs.getString("PASSWORD");
+				String email = rs.getString("EMAIL");
+				int roleId = rs.getInt("ROLE_ID");
 				
 				Employee e = new Employee(id, first_name, last_name, username, password, email, roleId);
 				list.add(e);
@@ -82,8 +81,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		} catch(SQLException e) {
 			logger.warn("Unable to retrieve all users", e);
 		}
-		
 		return list;
 	}
-
+	
 }

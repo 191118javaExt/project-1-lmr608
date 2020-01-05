@@ -16,7 +16,6 @@ public class Employee implements Serializable {
 	
 	public Employee() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Employee(int id, String firstName, String lastName, String username, String password, String email,

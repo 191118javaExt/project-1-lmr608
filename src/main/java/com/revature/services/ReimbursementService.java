@@ -3,32 +3,44 @@ package com.revature.services;
 import java.util.List;
 
 import com.revature.models.Reimbursement;
+import com.revature.repositories.ReimbursementDAO;
 import com.revature.repositories.ReimbursementDAOImpl;
 
 public class ReimbursementService {
 
-	public static boolean insert(Reimbursement r) {
-		return new ReimbursementDAOImpl().insert(r);
-	}
-	
-	public static boolean update(Reimbursement r) {
-		return new ReimbursementDAOImpl().update(r);
-	}
-	
-	public static List<Reimbursement> findAll() {
-		return new ReimbursementDAOImpl().findAll();
-	}
-	
-	public static Reimbursement findById(int id) {
-		List<Reimbursement> all = new ReimbursementDAOImpl().findAll();
+	private ReimbursementDAO rd = new ReimbursementDAOImpl();
+
+	public ReimbursementService() {
 		
-		for(Reimbursement r : all) {
-			if(r.getId() == id) {
-				return r;
-			}
-		}
-		
-		return null;
+	}
+	
+	public List<Reimbursement> pending(int id, boolean approved) {
+		return rd.pending(id, approved);
+	}
+	
+	public List<Reimbursement> resolved(int id, boolean approved) {
+		return rd.resolved(id, approved);
+	}
+	
+	public List<Reimbursement> myPending(int id) {
+		return rd.myPending(id);
+	}
+	
+	public List<Reimbursement> myResolved(int id) {
+		return rd.myResolved(id);
+	}
+	
+	public boolean submit(int id,double amount) {
+		return rd.submit(id, amount);
+	}
+	
+	
+	public boolean approve(double amount, int empid, int reimid) {
+		return rd.approve(amount,empid,reimid);
+	}
+	
+	public List<Reimbursement> singleEmp(int id) {
+		return rd.singleEmp(id);
 	}
 	
 }

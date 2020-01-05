@@ -18,7 +18,6 @@ public class Reimbursement implements Serializable {
 	
 	public Reimbursement() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Reimbursement(int id, double amount, LocalDateTime submitted, LocalDateTime resolved, int authorId,
