@@ -169,7 +169,7 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 	}
 	
 	@Override
-	public boolean approve(double amount, int userid, int reimid) {
+	public boolean resolve(double amount, int userid, int reimid) {
 		try (Connection conn = ConnectionUtil.getConnection()) {
 			String sql = ""; 
 			PreparedStatement pstmt = conn.prepareStatement(sql);			

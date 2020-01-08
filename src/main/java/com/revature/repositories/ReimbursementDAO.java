@@ -12,7 +12,7 @@ public interface ReimbursementDAO {
 	public List<Reimbursement> myPending(int id);
 	public List<Reimbursement> myResolved(int id);
 	public boolean submit(int id, double amount);
-	public boolean approve(double amount, int userid, int reimid);
+	public boolean resolve(double amount, int userid, int reimid);
 	public List<Reimbursement> singleEmp(int id);
 	
 }
