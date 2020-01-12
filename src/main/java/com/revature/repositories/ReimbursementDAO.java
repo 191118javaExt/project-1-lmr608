@@ -6,13 +6,12 @@ import com.revature.models.Reimbursement;
 
 public interface ReimbursementDAO {
 
-	public List<Reimbursement> empId(int id);
-	public List<Reimbursement> pending(int id, boolean status);
-	public List<Reimbursement> resolved(int id, boolean status);
-	public List<Reimbursement> myPending(int id);
-	public List<Reimbursement> myResolved(int id);
-	public boolean submit(int id, double amount);
-	public boolean resolve(double amount, int userid, int reimid);
-	public List<Reimbursement> singleEmp(int id);
+	public List<Reimbursement> getAllReimbursements();
+	public List<Reimbursement> getByReimbursementId(int id);
+	public List<Reimbursement> getByStatusId(int id);
+	public List<Reimbursement> getByUserId(int id);
+	public List<Reimbursement> getByStatusAndUserId(int sid, int aid);
+	public boolean submitReimbursement(Reimbursement reiumbursement);
+	public boolean resolveReimbursement(Reimbursement reiumbursement);
 	
 }

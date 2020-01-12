@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.revature.models.Reimbursement;
-import com.revature.utils.CloseStreams;
 import com.revature.utils.ConnectionUtil;
 
 public class ReimbursementDAOImpl implements ReimbursementDAO {
@@ -19,173 +19,231 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 	private static Logger logger = Logger.getLogger(ReimbursementDAOImpl.class);
 
 	@Override
-	public List<Reimbursement> empId(int id) {
-		List<Reimbursement> r1 = new ArrayList<>();
+	public List<Reimbursement> getAllReimbursements() {
+		List<Reimbursement> allReimbursements = new ArrayList<>();
 		try (Connection conn = ConnectionUtil.getConnection()) {
-			String sql = "SELECT * FROM REIMBURSEMENTS WHERE EMP_ID = ?";
+			
+			String sql = "SELECT * FROM PROJECT1.REIMBURSEMENTS;";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-
-			pstmt.setInt(1, id);
 			ResultSet rs = pstmt.executeQuery();
+			int i = 1;
+			
 			while(rs.next()) {
 				int reimId = rs.getInt("REIM_ID");
 				double amount = rs.getDouble("AMOUNT");
 				LocalDateTime submitted = rs.getTimestamp("SUBMITTED").toLocalDateTime();
 				LocalDateTime resolved = rs.getTimestamp("RESOLVED").toLocalDateTime();
+				String description = rs.getString("DESCRIPTION");
+				byte[] receipt = rs.getBytes("RECEIPT");
 				int authorId = rs.getInt("AUTHOR");
 				int resolverId = rs.getInt("RESOLVER");
-				boolean approved = rs.getBoolean("STATUS_ID");
+				int statusId = rs.getInt("STATUS_ID");
 				int typeId = rs.getInt("TYPE_ID");
-				r1.add(new Reimbursement(reimId, amount, submitted, resolved, authorId, resolverId, approved, typeId));
-				System.out.println(amount);
+				
+				Reimbursement reimbursement = new Reimbursement(reimId, amount, submitted, resolved, description, receipt, authorId, resolverId, statusId, typeId);
+				allReimbursements.add(i, reimbursement);
+				i++;
 			}
 
-		} 
-		catch (SQLException e) {
+		} catch (SQLException e) {
+			logger.warn("Unable to get all Reimbursements", e);
 			e.printStackTrace();
 		}
-		return r1;
+		return allReimbursements;
 	}
 
 	@Override
-	public List<Reimbursement> pending(int id, boolean status) {
-		List<Reimbursement> r2 = new ArrayList<>();
+	public List<Reimbursement> getByReimbursementId(int id) {
+		
+		List<Reimbursement> Reimbursement = new ArrayList<>();
 		try (Connection conn = ConnectionUtil.getConnection()) {
-			String sql = "SELECT * FROM REIMBURSEMENTS WHERE EMP_ID = ? AND STATUS_ID = ?";
+			
+			String sql = "SELECT * FROM PROJECT1.REIMBURSEMENTS WHERE REIM_ID = ?;";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, id);
-			pstmt.setBoolean(2, status);
 			ResultSet rs = pstmt.executeQuery();
+			int i = 1;
+			
 			while(rs.next()) {
 				int reimId = rs.getInt("REIM_ID");
 				double amount = rs.getDouble("AMOUNT");
 				LocalDateTime submitted = rs.getTimestamp("SUBMITTED").toLocalDateTime();
 				LocalDateTime resolved = rs.getTimestamp("RESOLVED").toLocalDateTime();
+				String description = rs.getString("DESCRIPTION");
+				byte[] receipt = rs.getBytes("RECEIPT");
 				int authorId = rs.getInt("AUTHOR");
 				int resolverId = rs.getInt("RESOLVER");
-				boolean approved = rs.getBoolean("STATUS_ID");
+				int statusId = rs.getInt("STATUS_ID");
 				int typeId = rs.getInt("TYPE_ID");
-				r2.add(new Reimbursement(reimId, amount, submitted, resolved, authorId, resolverId, approved, typeId));
+				
+				Reimbursement reimbursement = new Reimbursement(reimId, amount, submitted, resolved, description, receipt, authorId, resolverId, statusId, typeId);
+				Reimbursement.add(i, reimbursement);
+				i++;
 			}
 
-		}catch (SQLException e) {
+		} catch (SQLException e) {
+			logger.warn("Unable to get Reimbursement from ID", e);
 			e.printStackTrace();
 		}
-		return r2;
+		return Reimbursement;
 	}
 
 	@Override
-	public List<Reimbursement> resolved(int id, boolean status) {
-		List<Reimbursement> r3 = new ArrayList<>();
-		try (Connection conn = ConnectionUtil.getConnection()) {			
-			String sql = "SELECT * FROM REIMBURSEMENTS WHERE EMP_ID = ? AND STATUS_ID = ?";
+	public List<Reimbursement> getByStatusId(int id) {
+		
+		List<Reimbursement> statusReimbursements = new ArrayList<>();
+		try (Connection conn = ConnectionUtil.getConnection()) {
+			
+			String sql = "SELECT * FROM PROJECT1.REIMBURSEMENTS WHERE STATUS_ID = ?;";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, id);
-			pstmt.setBoolean(2, status);
 			ResultSet rs = pstmt.executeQuery();
+			int i = 1;
+			
 			while(rs.next()) {
 				int reimId = rs.getInt("REIM_ID");
 				double amount = rs.getDouble("AMOUNT");
 				LocalDateTime submitted = rs.getTimestamp("SUBMITTED").toLocalDateTime();
 				LocalDateTime resolved = rs.getTimestamp("RESOLVED").toLocalDateTime();
+				String description = rs.getString("DESCRIPTION");
+				byte[] receipt = rs.getBytes("RECEIPT");
 				int authorId = rs.getInt("AUTHOR");
 				int resolverId = rs.getInt("RESOLVER");
-				boolean approved = rs.getBoolean("STATUS_ID");
+				int statusId = rs.getInt("STATUS_ID");
 				int typeId = rs.getInt("TYPE_ID");
-				r3.add(new Reimbursement(reimId, amount, submitted, resolved, authorId, resolverId, approved, typeId));
+				
+				Reimbursement reimbursement = new Reimbursement(reimId, amount, submitted, resolved, description, receipt, authorId, resolverId, statusId, typeId);
+				statusReimbursements.add(i, reimbursement);
+				i++;
 			}
+
+		} catch (SQLException e) {
+			logger.warn("Unable to get Reimbursements from Status", e);
+			e.printStackTrace();
+		}
+		return statusReimbursements;
+	}
+
+	@Override
+	public List<Reimbursement> getByUserId(int id) {
+		
+		List<Reimbursement> userReimbursements = new ArrayList<>();
+		try (Connection conn = ConnectionUtil.getConnection()) {
+			
+			String sql = "SELECT * FROM PROJECT1.REIMBURSEMENTS WHERE USER_ID = ?;";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			ResultSet rs = pstmt.executeQuery();
+			int i = 1;
+			
+			while(rs.next()) {
+				int reimId = rs.getInt("REIM_ID");
+				double amount = rs.getDouble("AMOUNT");
+				LocalDateTime submitted = rs.getTimestamp("SUBMITTED").toLocalDateTime();
+				LocalDateTime resolved = rs.getTimestamp("RESOLVED").toLocalDateTime();
+				String description = rs.getString("DESCRIPTION");
+				byte[] receipt = rs.getBytes("RECEIPT");
+				int authorId = rs.getInt("AUTHOR");
+				int resolverId = rs.getInt("RESOLVER");
+				int statusId = rs.getInt("STATUS_ID");
+				int typeId = rs.getInt("TYPE_ID");
+				
+				Reimbursement reimbursement = new Reimbursement(reimId, amount, submitted, resolved, description, receipt, authorId, resolverId, statusId, typeId);
+				userReimbursements.add(i, reimbursement);
+				i++;
+			}
+
+		} catch (SQLException e) {
+			logger.warn("Unable to get Reimbursements from User", e);
+			e.printStackTrace();
+		}
+		return userReimbursements;
+	}
 	
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return r3;
-	}
-
 	@Override
-	public List<Reimbursement> myPending(int id) {
-		List<Reimbursement> r4 = new ArrayList<>();
+	public List<Reimbursement> getByStatusAndUserId(int sid, int aid) {
+		
+		List<Reimbursement> statusUserReimbursements = new ArrayList<>();
 		try (Connection conn = ConnectionUtil.getConnection()) {
-			String sql = "SELECT * FROM REIMBURSEMENTS WHERE USER_ID = 1 AND STATUS_ID = 2 AND USER_ID != ?";
+			
+			String sql = "SELECT * FROM PROJECT1.REIMBURSEMENTS WHERE STATUS_ID = ? AND WHERE AUTHOR = ?;";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, id);
+			pstmt.setInt(1, sid);
+			pstmt.setInt(2, aid);
 			ResultSet rs = pstmt.executeQuery();
+			int i = 1;
+			
 			while(rs.next()) {
 				int reimId = rs.getInt("REIM_ID");
 				double amount = rs.getDouble("AMOUNT");
 				LocalDateTime submitted = rs.getTimestamp("SUBMITTED").toLocalDateTime();
 				LocalDateTime resolved = rs.getTimestamp("RESOLVED").toLocalDateTime();
+				String description = rs.getString("DESCRIPTION");
+				byte[] receipt = rs.getBytes("RECEIPT");
 				int authorId = rs.getInt("AUTHOR");
 				int resolverId = rs.getInt("RESOLVER");
-				boolean approved = rs.getBoolean("STATUS_ID");
+				int statusId = rs.getInt("STATUS_ID");
 				int typeId = rs.getInt("TYPE_ID");
-				r4.add(new Reimbursement(reimId, amount, submitted, resolved, authorId, resolverId, approved, typeId));
+				
+				Reimbursement reimbursement = new Reimbursement(reimId, amount, submitted, resolved, description, receipt, authorId, resolverId, statusId, typeId);
+				statusUserReimbursements.add(i, reimbursement);
+				i++;
 			}
 
-		}catch (SQLException e) {
+		} catch (SQLException e) {
+			logger.warn("Unable to get Reimbursements from Status", e);
 			e.printStackTrace();
 		}
-		return r4;
+		return statusUserReimbursements;
 	}
-
+	
+	@SuppressWarnings("deprecation")
 	@Override
-	public List<Reimbursement> myResolved(int id) {
-		List<Reimbursement> r4 = new ArrayList<>();
+	public boolean submitReimbursement(Reimbursement reimbursement) {
+		
 		try (Connection conn = ConnectionUtil.getConnection()) {
-			String sql = "SELECT * FROM REIMBURSEMENTS WHERE STATUS_ID = 0 OR STATUS_ID = 1";
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, id);
-			ResultSet rs = pstmt.executeQuery();
-			while(rs.next()) {
-				int reimId = rs.getInt("REIM_ID");
-				double amount = rs.getDouble("AMOUNT");
-				LocalDateTime submitted = rs.getTimestamp("SUBMITTED").toLocalDateTime();
-				LocalDateTime resolved = rs.getTimestamp("RESOLVED").toLocalDateTime();
-				int authorId = rs.getInt("AUTHOR");
-				int resolverId = rs.getInt("RESOLVER");
-				boolean approved = rs.getBoolean("STATUS_ID");
-				int typeId = rs.getInt("TYPE_ID");
-				r4.add(new Reimbursement(reimId, amount, submitted, resolved, authorId, resolverId, approved, typeId));
-			}
-
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return r4;
-	}
-
-	@Override
-	public boolean submit(int id, double amount) {
-		try (Connection conn = ConnectionUtil.getConnection()) {
-			String sql = "INSERT INTO REIMBURSEMENTS (EMP_ID, AMOUNT) VALUES (?, ?)";
+			
+			String sql = "INSERT INTO PROJECT1.REIMBURSEMENTS (AMOUNT, SUBMITTED, RESOLVED, DESCRIPTION, RECEIPT, AUTHOR, RESOLVER, STATUS_ID, TYPE_ID)" + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 			PreparedStatement pstmt = conn.prepareStatement(sql);			
-			pstmt.setInt(1, id);
-			pstmt.setDouble(2, amount);
-			pstmt.executeUpdate();
-		} 
-		 catch (SQLException e) {
-			e.printStackTrace();
+			pstmt.setDouble(1, reimbursement.getAmount());
+			pstmt.setTimestamp(2, new Timestamp(0, 0, 0, 0, 0, 0, 0));
+			pstmt.setTimestamp(3, null);
+			pstmt.setString(4, reimbursement.getDescription());
+			pstmt.setBytes(5, reimbursement.getReceipt());
+			pstmt.setInt(6, reimbursement.getAuthorId());
+			pstmt.setInt(7, reimbursement.getResolverId());
+			pstmt.setInt(8, reimbursement.getStatusId());
+			pstmt.setInt(9, reimbursement.getTypeId());
+			
+			boolean check = pstmt.execute();
+			if (check == false) {
+				return true;
+			}
+		} catch (SQLException e) {
+			 logger.warn("Unable to Submit Reimbursement", e);
+			 e.printStackTrace();
 		}
 		return false;
 	}
 	
 	@Override
-	public boolean resolve(double amount, int userid, int reimid) {
+	public boolean resolveReimbursement(Reimbursement reimbursement) {
+		
 		try (Connection conn = ConnectionUtil.getConnection()) {
-			String sql = ""; 
-			PreparedStatement pstmt = conn.prepareStatement(sql);			
-
-			pstmt.executeUpdate();
-		} 
-		 catch (SQLException e) {
-			e.printStackTrace();
+			
+			String sql = "UPDATE PROJECT1.REIMBURSEMENTS SET STATUS_ID = ? WHERE REIM_ID = ?;"; 
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, reimbursement.getStatusId());
+			pstmt.setInt(1, reimbursement.getId());
+			
+			boolean check = pstmt.execute();
+			if(check == false) {
+				return true;
+			}
+		} catch (SQLException e) {
+			 logger.warn("Unable to Resolve Reimbursement", e);
+			 e.printStackTrace();
 		}
 		return false;
 	}
-
-	@Override
-	public List<Reimbursement> singleEmp(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }

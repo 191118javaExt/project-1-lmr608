@@ -9,14 +9,9 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 public class ConnectionUtil {
-
 	private static Logger logger = Logger.getLogger(ConnectionUtil.class);
 
 	public static Connection getConnection() {
-		
-		String url = "jdbc:postgresql://localhost:5432/";
-		String username = "postgres";
-		String password = "password";
 		
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -43,5 +38,4 @@ public class ConnectionUtil {
 		
 		return conn;
 	}
-	
 }

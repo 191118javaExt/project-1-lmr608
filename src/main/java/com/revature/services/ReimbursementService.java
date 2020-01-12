@@ -8,39 +8,37 @@ import com.revature.repositories.ReimbursementDAOImpl;
 
 public class ReimbursementService {
 
-	private ReimbursementDAO rd = new ReimbursementDAOImpl();
+	private ReimbursementDAO rdao = new ReimbursementDAOImpl();
 
 	public ReimbursementService() {
 		
 	}
 	
-	public List<Reimbursement> pending(int id, boolean approved) {
-		return rd.pending(id, approved);
+	public List<Reimbursement> getAllReimbursements() {
+		return rdao.getAllReimbursements();
 	}
 	
-	public List<Reimbursement> resolved(int id, boolean approved) {
-		return rd.resolved(id, approved);
+	public List<Reimbursement> getByReimbursementId(int id) {
+		return rdao.getByReimbursementId(id);
 	}
 	
-	public List<Reimbursement> myPending(int id) {
-		return rd.myPending(id);
+	public List<Reimbursement> getByStatusId(int id) {
+		return rdao.getByStatusId(id);
 	}
 	
-	public List<Reimbursement> myResolved(int id) {
-		return rd.myResolved(id);
+	public List<Reimbursement> getByUserId(int id) {
+		return rdao.getByUserId(id);
 	}
 	
-	public boolean submit(int id,double amount) {
-		return rd.submit(id, amount);
+	public List<Reimbursement> getByStatusAndUserId(int sid, int aid) {
+		return rdao.getByStatusAndUserId(sid, aid);
 	}
 	
-	
-	public boolean approve(double amount, int empid, int reimid) {
-		return rd.approve(amount,empid,reimid);
+	public boolean submitReimbursement(Reimbursement reiumbursement) {
+		return rdao.submitReimbursement(reiumbursement);
 	}
 	
-	public List<Reimbursement> singleEmp(int id) {
-		return rd.singleEmp(id);
-	}
-	
+	public boolean resolveReimbursement(Reimbursement reiumbursement) {
+		return rdao.resolveReimbursement(reiumbursement);
+	}	
 }

@@ -2,6 +2,7 @@ package com.revature.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 public class Reimbursement implements Serializable {
 
@@ -11,25 +12,43 @@ public class Reimbursement implements Serializable {
 	private double amount;
 	private LocalDateTime submitted;
 	private LocalDateTime resolved;
+	private String description;
+	private byte[] receipt;
 	private int authorId;
 	private int resolverId;
-	private boolean approved;
+	private int statusId;
 	private int typeId;
 	
 	public Reimbursement() {
 		super();
 	}
 
-	public Reimbursement(int id, double amount, LocalDateTime submitted, LocalDateTime resolved, int authorId,
-			int resolverId, boolean approved, int typeId) {
+	public Reimbursement(int id, double amount, LocalDateTime submitted, LocalDateTime resolved, String description,
+			byte[] receipt, int authorId, int resolverId, int statusId, int typeId) {
 		super();
 		this.id = id;
 		this.amount = amount;
 		this.submitted = submitted;
 		this.resolved = resolved;
+		this.description = description;
+		this.receipt = receipt;
 		this.authorId = authorId;
 		this.resolverId = resolverId;
-		this.approved = approved;
+		this.statusId = statusId;
+		this.typeId = typeId;
+	}
+
+	public Reimbursement(double amount, LocalDateTime submitted, LocalDateTime resolved, String description,
+			byte[] receipt, int authorId, int resolverId, int statusId, int typeId) {
+		super();
+		this.amount = amount;
+		this.submitted = submitted;
+		this.resolved = resolved;
+		this.description = description;
+		this.receipt = receipt;
+		this.authorId = authorId;
+		this.resolverId = resolverId;
+		this.statusId = statusId;
 		this.typeId = typeId;
 	}
 
@@ -65,6 +84,22 @@ public class Reimbursement implements Serializable {
 		this.resolved = resolved;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public byte[] getReceipt() {
+		return receipt;
+	}
+
+	public void setReceipt(byte[] receipt) {
+		this.receipt = receipt;
+	}
+
 	public int getAuthorId() {
 		return authorId;
 	}
@@ -81,12 +116,12 @@ public class Reimbursement implements Serializable {
 		this.resolverId = resolverId;
 	}
 
-	public boolean isApproved() {
-		return approved;
+	public int getStatusId() {
+		return statusId;
 	}
 
-	public void setApproved(boolean approved) {
-		this.approved = approved;
+	public void setStatusId(int statusId) {
+		this.statusId = statusId;
 	}
 
 	public int getTypeId() {
@@ -104,11 +139,13 @@ public class Reimbursement implements Serializable {
 		long temp;
 		temp = Double.doubleToLongBits(amount);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + (approved ? 1231 : 1237);
 		result = prime * result + authorId;
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + id;
+		result = prime * result + Arrays.hashCode(receipt);
 		result = prime * result + ((resolved == null) ? 0 : resolved.hashCode());
 		result = prime * result + resolverId;
+		result = prime * result + statusId;
 		result = prime * result + ((submitted == null) ? 0 : submitted.hashCode());
 		result = prime * result + typeId;
 		return result;
@@ -125,11 +162,16 @@ public class Reimbursement implements Serializable {
 		Reimbursement other = (Reimbursement) obj;
 		if (Double.doubleToLongBits(amount) != Double.doubleToLongBits(other.amount))
 			return false;
-		if (approved != other.approved)
-			return false;
 		if (authorId != other.authorId)
 			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
 		if (id != other.id)
+			return false;
+		if (!Arrays.equals(receipt, other.receipt))
 			return false;
 		if (resolved == null) {
 			if (other.resolved != null)
@@ -137,6 +179,8 @@ public class Reimbursement implements Serializable {
 		} else if (!resolved.equals(other.resolved))
 			return false;
 		if (resolverId != other.resolverId)
+			return false;
+		if (statusId != other.statusId)
 			return false;
 		if (submitted == null) {
 			if (other.submitted != null)
@@ -151,8 +195,7 @@ public class Reimbursement implements Serializable {
 	@Override
 	public String toString() {
 		return "Reimbursement [id=" + id + ", amount=" + amount + ", submitted=" + submitted + ", resolved=" + resolved
-				+ ", authorId=" + authorId + ", resolverId=" + resolverId + ", approved=" + approved + ", typeId="
-				+ typeId + "]";
+				+ ", description=" + description + ", receipt=" + receipt + ", authorId=" + authorId + ", resolverId="
+				+ resolverId + ", statusId=" + statusId + ", typeId=" + typeId + "]";
 	}
-	
 }

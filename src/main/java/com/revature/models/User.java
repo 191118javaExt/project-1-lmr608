@@ -2,7 +2,7 @@ package com.revature.models;
 
 import java.io.Serializable;
 
-public class Employee implements Serializable {
+public class User implements Serializable {
 
 	private static final long serialVersionUID = 8154117081788566281L;
 
@@ -14,11 +14,11 @@ public class Employee implements Serializable {
 	private String email;
 	private int roleId;
 	
-	public Employee() {
+	public User() {
 		super();
 	}
 
-	public Employee(int id, String firstName, String lastName, String username, String password, String email,
+	public User(int id, String firstName, String lastName, String username, String password, String email,
 			int roleId) {
 		super();
 		this.id = id;
@@ -108,7 +108,7 @@ public class Employee implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Employee other = (Employee) obj;
+		User other = (User) obj;
 		if (email == null) {
 			if (other.email != null)
 				return false;
@@ -143,7 +143,7 @@ public class Employee implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Employee [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
 				+ ", password=" + password + ", email=" + email + ", roleId=" + roleId + "]";
 	}
 	
