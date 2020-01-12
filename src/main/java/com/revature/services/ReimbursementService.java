@@ -30,10 +30,6 @@ public class ReimbursementService {
 		return rdao.getByUserId(id);
 	}
 	
-	public List<Reimbursement> getByStatusAndUserId(int sid, int aid) {
-		return rdao.getByStatusAndUserId(sid, aid);
-	}
-	
 	public boolean submitReimbursement(Reimbursement reiumbursement) {
 		return rdao.submitReimbursement(reiumbursement);
 	}

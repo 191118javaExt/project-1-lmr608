@@ -160,43 +160,6 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 		return userReimbursements;
 	}
 	
-	@Override
-	public List<Reimbursement> getByStatusAndUserId(int sid, int aid) {
-		
-		List<Reimbursement> statusUserReimbursements = new ArrayList<>();
-		try (Connection conn = ConnectionUtil.getConnection()) {
-			
-			String sql = "SELECT * FROM PROJECT1.REIMBURSEMENTS WHERE STATUS_ID = ? AND WHERE AUTHOR = ?;";
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, sid);
-			pstmt.setInt(2, aid);
-			ResultSet rs = pstmt.executeQuery();
-			int i = 1;
-			
-			while(rs.next()) {
-				int reimId = rs.getInt("REIM_ID");
-				double amount = rs.getDouble("AMOUNT");
-				LocalDateTime submitted = rs.getTimestamp("SUBMITTED").toLocalDateTime();
-				LocalDateTime resolved = rs.getTimestamp("RESOLVED").toLocalDateTime();
-				String description = rs.getString("DESCRIPTION");
-				byte[] receipt = rs.getBytes("RECEIPT");
-				int authorId = rs.getInt("AUTHOR");
-				int resolverId = rs.getInt("RESOLVER");
-				int statusId = rs.getInt("STATUS_ID");
-				int typeId = rs.getInt("TYPE_ID");
-				
-				Reimbursement reimbursement = new Reimbursement(reimId, amount, submitted, resolved, description, receipt, authorId, resolverId, statusId, typeId);
-				statusUserReimbursements.add(i, reimbursement);
-				i++;
-			}
-
-		} catch (SQLException e) {
-			logger.warn("Unable to get Reimbursements from Status", e);
-			e.printStackTrace();
-		}
-		return statusUserReimbursements;
-	}
-	
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean submitReimbursement(Reimbursement reimbursement) {
